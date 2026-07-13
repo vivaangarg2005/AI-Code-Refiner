@@ -1,6 +1,6 @@
-# AI Code Refiner - Vibe Coding Project
+# AI Code Refiner
 
-This project is a full-stack AI-powered web application that fulfills the requirements of the **Vibe Coding Masterclass Series** final assignment.
+This project is a full-stack AI-powered web application.
 
 It features a beautiful glassmorphism React frontend, an Express Node.js backend, and streaming LLM integration using the Google Gemini API.
 
