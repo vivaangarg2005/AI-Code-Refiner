@@ -12,8 +12,9 @@ COPY backend/server.js ./backend/
 # Copy the pre-built frontend from the local dist folder
 COPY frontend/dist ./frontend/dist
 
-# Expose the backend port
-EXPOSE 3000
+# Set port environment and expose it
+ENV PORT=8080
+EXPOSE 8080
 
 # Start the server
 WORKDIR /app/backend

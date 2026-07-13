@@ -46,4 +46,4 @@ Building this project demonstrated the immense power of integrating LLMs into tr
 - **Docker Simplifies Deployment:** Using a multi-stage build to compile the frontend and serve it from the backend made the final AWS deployment strategy straightforward and cost-effective (single container).
 
 ---
-**Live Application URL:** `[INSERT AWS URL HERE]`
+**Live Application URL:** `http://AI-Code-Refiner-env.eba-miqcxvnt.ap-south-1.elasticbeanstalk.com`

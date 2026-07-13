@@ -27,4 +27,4 @@ Developers, especially beginners and students, often struggle with understanding
 
 ---
 *Note: Replace this section with your live AWS URL once deployed!*  
-**Live Application URL:** `[INSERT AWS URL HERE]`
+**Live Application URL:** `http://AI-Code-Refiner-env.eba-miqcxvnt.ap-south-1.elasticbeanstalk.com`
