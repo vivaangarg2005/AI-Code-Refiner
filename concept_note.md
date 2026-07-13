@@ -26,5 +26,5 @@ Developers, especially beginners and students, often struggle with understanding
 - **Outcomes:** Users will gain an immediate understanding of their code, catch vulnerabilities early, and learn better coding practices through AI-suggested refactoring, ultimately becoming more productive developers.
 
 ---
-*Note: Replace this section with your live AWS URL once deployed!*  
+
 **Live Application URL:** `http://AI-Code-Refiner-env.eba-miqcxvnt.ap-south-1.elasticbeanstalk.com`
