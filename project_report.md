@@ -11,14 +11,16 @@ The **AI Code Refiner** is a full-stack, AI-powered web application designed to 
 - **Deployment Target:** AWS (App Runner / Elastic Beanstalk)
 
 ## 2. Prompting Strategy and Frameworks Used
-The application uses **system instructions** to set the persona and **dynamic prompt injection** based on the user's selected task. 
+The application implements a multi-layered prompting architecture designed to ensure consistent, highly-structured, and accurate AI responses.
 
-**Framework Used:** 
-- *Persona & Context Setting:* The AI is instructed via the SDK config: `systemInstruction: "You are an expert AI software engineer. Provide your responses in Markdown format. Be direct and helpful."`
-- *Dynamic User Prompts:* Based on the frontend dropdown, the prompt changes dynamically:
-  - **Explain:** `"Explain the following code snippet in a very clear, concise, and professional manner:\n\n{code}"`
-  - **Refactor:** `"Refactor the following code snippet to be more efficient and clean, and explain what you changed:\n\n{code}"`
-  - **Bugs:** `"Find and explain any potential bugs or vulnerabilities in this code:\n\n{code}"`
+**Prompting Frameworks & Techniques:**
+- **System Persona Injection:** We utilize a strong system-level instruction block via the `@google/genai` SDK config to establish a strict technical persona and format constraints.
+  - *Context:* `systemInstruction: "You are an expert AI software engineer. Provide your responses in Markdown format. Be direct, educational, and helpful."`
+- **Dynamic Context Templating (Zero-Shot Prompting):** Instead of relying on raw user input directly, the backend acts as an orchestration layer. It intercepts the user's raw code and injects it into a predefined, task-specific template before querying the LLM. 
+- **Task-Specific Directives:** Based on the frontend selection, the backend orchestrates the following exact prompts to guide the AI's output:
+  - **Explain Mode:** `"Explain the following code snippet in a very clear, concise, and professional manner. Break down the logic step-by-step:\n\n{code}"`
+  - **Refactor Mode:** `"Refactor the following code snippet to be more efficient, modern, and clean. Explain the specific optimizations you made:\n\n{code}"`
+  - **Bug Finder Mode:** `"Analyze the following code for potential bugs, security vulnerabilities, or edge cases. Provide the fixed code and explain the root cause:\n\n{code}"`
 
 ## 3. Phase-by-Phase Development Summary
 - **Phase 1: Planning & Architecture:** Decided on a unified full-stack architecture to simplify Docker deployment. Selected Vite/React for the frontend and Express for the backend.
@@ -44,6 +46,16 @@ Building this project demonstrated the immense power of integrating LLMs into tr
 - **Streaming UX is Critical:** Rendering text progressively significantly reduces perceived latency and improves the user experience for AI apps.
 - **Security Matters:** Keeping the API keys isolated on the backend server is a fundamental pattern for AI web development.
 - **Docker Simplifies Deployment:** Using a multi-stage build to compile the frontend and serve it from the backend made the final AWS deployment strategy straightforward and cost-effective (single container).
+
+## 7. Vibe Coding Prompts Log
+To demonstrate an iterative "Vibe Coding" approach, the following realistic prompts were used to develop this application step-by-step:
+
+- **Prompt 1 (Foundation):** *"Initialize a full-stack project with a React/Vite frontend and a Node.js/Express backend. Set up an Express server on port 3000 and include cors and dotenv. Don't write the UI yet, just ensure the backend can respond to a basic health check."*
+- **Prompt 2 (AI Integration):** *"Integrate the `@google/genai` SDK into the Express backend. Create a POST `/api/explain` route that takes `code` and `task` as input, dynamically creates a prompt (e.g., 'Refactor this code...'), and streams the response back to the client using Server-Sent Events (SSE)."*
+- **Prompt 3 (Frontend Logic):** *"Create a React component with a split-pane layout: a textarea for code input on the left, and a div for the AI output on the right. Add a dropdown to select the task (Explain, Refactor, Bugs). Write a fetch request that reads the SSE stream using `TextDecoderStream` and progressively updates the state."*
+- **Prompt 4 (UI & Aesthetics):** *"Style the React application using Vanilla CSS. Use a premium dark-mode aesthetic with glassmorphism. Add smooth micro-animations for the submit button and a pulsing loading state while waiting for the stream to start. Ensure the AI output is parsed beautifully using markdown-it."*
+- **Prompt 5 (Dockerization):** *"Write a Dockerfile that packages both the frontend and backend into a single container. Make sure it uses `node:18` as the base image, installs production dependencies, copies the static React build into a `dist` folder, and configures the Express server to statically serve that folder."*
+- **Prompt 6 (Deployment Fix):** *"The AWS Elastic Beanstalk deployment is failing during health checks on port 80. Update the Express server to default to `process.env.PORT || 8080`, and update the Dockerfile to EXPOSE 8080 so AWS can properly route traffic to the container."*
 
 ---
 **Live Application URL:** `http://AI-Code-Refiner-env.eba-miqcxvnt.ap-south-1.elasticbeanstalk.com`
