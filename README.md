@@ -43,20 +43,23 @@ npm run dev
 Visit `http://localhost:5173` in your browser.
 
 ### 3. Run with Docker
-You can easily spin up the production build locally using Docker Compose. Ensure your `.env` key is set.
+You can easily spin up the production build locally using Docker.
 
 ```bash
-docker-compose up --build
+docker build -t ai-code-refiner .
+docker run -p 8080:8080 -e GEMINI_API_KEY=your_actual_api_key_here ai-code-refiner
 ```
-Visit `http://localhost:3000` in your browser.
+Visit `http://localhost:8080` in your browser.
 
-## AWS Deployment Guide (App Runner)
-1. Push this entire repository to your GitHub.
-2. Log into the AWS Console and go to **AWS App Runner**.
-3. Create an App Runner service and connect it to your GitHub repository.
-4. Set the build settings:
-   - **Build Command:** `docker build -t ai-app .`
-   - **Start Command:** `docker run -p 3000:3000 -e GEMINI_API_KEY=$GEMINI_API_KEY ai-app`
-   *(Alternatively, configure App Runner to use the Dockerfile directly).*
-5. Add your `GEMINI_API_KEY` to the App Runner Environment Variables.
-6. Deploy and get your public HTTPS URL!
+## Deployment
+This application is fully containerized and currently deployed on **AWS Elastic Beanstalk**.
+**Live URL:** [http://AI-Code-Refiner-env.eba-miqcxvnt.ap-south-1.elasticbeanstalk.com](http://AI-Code-Refiner-env.eba-miqcxvnt.ap-south-1.elasticbeanstalk.com)
+
+## AWS Deployment Guide (Elastic Beanstalk)
+1. Run `tar.exe -a -c -f project.zip Dockerfile .dockerignore backend/server.js backend/package.json frontend/dist` from the root directory to create a pristine ZIP file.
+2. Log into the AWS Console and go to **AWS Elastic Beanstalk**.
+3. Create a new environment using the **Docker** platform (Amazon Linux 2023).
+4. Upload the `project.zip` file as your application code.
+5. In the **Configuration > Updates, monitoring, and routing** section, add your `GEMINI_API_KEY` as an Environment Property.
+6. Make sure the IAM Role attached to the EC2 Instance Profile has the `AWSElasticBeanstalkWebTier`, `AWSElasticBeanstalkWorkerTier`, and `AWSElasticBeanstalkMulticontainerDocker` policies.
+7. Deploy the environment and access the live application!
