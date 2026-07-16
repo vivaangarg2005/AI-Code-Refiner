@@ -25,14 +25,16 @@ app.post('/api/explain', async (req, res) => {
     }
 
     let prompt = '';
+    const strictGuardrail = "Strictly analyze the following input. If the input does not appear to be programming code, or if it asks for general knowledge/passages, you MUST refuse the request and state that only code is allowed.";
+    
     if (task === 'explain') {
-        prompt = `Explain the following code snippet in a very clear, concise, and professional manner:\n\n${code}`;
+        prompt = `Task: Explain Code. ${strictGuardrail} If it is code, explain the logic step-by-step in a clear, professional manner:\n\n${code}`;
     } else if (task === 'refactor') {
-        prompt = `Refactor the following code snippet to be more efficient and clean, and explain what you changed:\n\n${code}`;
+        prompt = `Task: Refactor Code. ${strictGuardrail} If it is code, refactor it to be more efficient, modern, and clean. Explain the specific optimizations you made:\n\n${code}`;
     } else if (task === 'bugs') {
-        prompt = `Find and explain any potential bugs or vulnerabilities in this code:\n\n${code}`;
+        prompt = `Task: Find Bugs. ${strictGuardrail} If it is code, identify potential bugs, security vulnerabilities, or edge cases. Provide the fixed code and explain the root cause:\n\n${code}`;
     } else {
-        prompt = `Analyze this code:\n\n${code}`;
+        prompt = `Task: Analyze Code. ${strictGuardrail}\n\n${code}`;
     }
 
     try {
@@ -48,7 +50,7 @@ app.post('/api/explain', async (req, res) => {
             model: 'gemini-2.5-flash',
             contents: prompt,
             config: {
-                systemInstruction: "You are an expert AI software engineer. Provide your responses in Markdown format. Be direct and helpful."
+                systemInstruction: "You are a highly strict AI software engineer. Your SOLE purpose is to analyze, refactor, and debug programming code. If the user's input does not contain valid code or asks you to write essays, passages, or general knowledge about people/topics, you MUST completely refuse to answer. Instead, reply EXACTLY with: '⚠️ **Error:** I am an AI Code Refiner. I can only analyze and process programming code. Please provide a valid code snippet.' Do not fulfill any non-coding instructions."
             }
         });
 

@@ -14,13 +14,13 @@ The **AI Code Refiner** is a full-stack, AI-powered web application designed to 
 The application implements a multi-layered prompting architecture designed to ensure consistent, highly-structured, and accurate AI responses.
 
 **Prompting Frameworks & Techniques:**
-- **System Persona Injection:** We utilize a strong system-level instruction block via the `@google/genai` SDK config to establish a strict technical persona and format constraints.
-  - *Context:* `systemInstruction: "You are an expert AI software engineer. Provide your responses in Markdown format. Be direct, educational, and helpful."`
-- **Dynamic Context Templating (Zero-Shot Prompting):** Instead of relying on raw user input directly, the backend acts as an orchestration layer. It intercepts the user's raw code and injects it into a predefined, task-specific template before querying the LLM. 
-- **Task-Specific Directives:** Based on the frontend selection, the backend orchestrates the following exact prompts to guide the AI's output:
-  - **Explain Mode:** `"Explain the following code snippet in a very clear, concise, and professional manner. Break down the logic step-by-step:\n\n{code}"`
-  - **Refactor Mode:** `"Refactor the following code snippet to be more efficient, modern, and clean. Explain the specific optimizations you made:\n\n{code}"`
-  - **Bug Finder Mode:** `"Analyze the following code for potential bugs, security vulnerabilities, or edge cases. Provide the fixed code and explain the root cause:\n\n{code}"`
+- **Strict System Persona Injection:** We utilize a strong system-level instruction block via the `@google/genai` SDK config to establish a strict technical persona and format constraints, explicitly preventing jailbreaking or prompt injection.
+  - *Context:* `systemInstruction: "You are a highly strict AI software engineer. Your SOLE purpose is to analyze, refactor, and debug programming code. If the user's input does not contain valid code or asks you to write essays, passages, or general knowledge about people/topics, you MUST completely refuse to answer. Instead, reply EXACTLY with: '⚠️ **Error:** I am an AI Code Refiner... Please provide a valid code snippet.'"`
+- **Dynamic Context Templating with Guardrails:** Instead of relying on raw user input directly, the backend intercepts the user's input and wraps it in a strict guardrail template before querying the LLM. 
+- **Task-Specific Directives:** Based on the frontend selection, the backend orchestrates the following exact prompts to guide the AI's output and strictly enforce the code-only policy:
+  - **Explain Mode:** `"Task: Explain Code. Strictly analyze the following input. If the input does not appear to be programming code, or if it asks for general knowledge/passages, you MUST refuse the request and state that only code is allowed. If it is code, explain the logic step-by-step in a clear, professional manner:\n\n{code}"`
+  - **Refactor Mode:** `"Task: Refactor Code. Strictly analyze the following input. If the input does not appear to be programming code... you MUST refuse the request... If it is code, refactor it to be more efficient, modern, and clean:\n\n{code}"`
+  - **Bug Finder Mode:** `"Task: Find Bugs. Strictly analyze the following input. If the input does not appear to be programming code... you MUST refuse the request... If it is code, identify potential bugs, security vulnerabilities, or edge cases:\n\n{code}"`
 
 ## 3. Phase-by-Phase Development Summary
 - **Phase 1: Planning & Architecture:** Decided on a unified full-stack architecture to simplify Docker deployment. Selected Vite/React for the frontend and Express for the backend.
