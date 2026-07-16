@@ -40,6 +40,10 @@ The architecture follows a unified client-server model packaged inside a single 
 - **Resolution:** Used the modern `fetch` API alongside a `ReadableStream` reader (`response.body.getReader()`) and a `TextDecoder` to manually parse the Server-Sent Events stream chunk-by-chunk.
 - **Challenge:** Express v5 `path-to-regexp` routing errors for wildcard SPA fallbacks (`app.get('*')`).
 - **Resolution:** Replaced the wildcard route with a generic middleware catch-all (`app.use(...)`) to safely serve the React `index.html` without triggering path syntax errors.
+- **Challenge:** AWS Elastic Beanstalk source bundle extraction errors (`ENOENT`). Default Windows zipping tools created malformed folder paths, causing the backend to fail when resolving `../frontend/dist`.
+- **Resolution:** Generated a pristine, Linux-compatible ZIP archive using the native `tar.exe` command to strictly preserve the root folder structure without nested artifacts.
+- **Challenge:** Mobile UI breaking and squishing. When the mobile virtual keyboard opened, `100vh` viewport shrinking caused the `flex: 1` textareas to compress to 0px. Additionally, iOS Safari auto-zoomed the layout.
+- **Resolution:** Restructured the mobile CSS (`@media (max-width: 600px)`) to use static heights (`min-height`) instead of flex growth, and forced the textarea `font-size` to exactly `16px` to prevent native iOS zooming.
 
 ## 6. Key Learnings and Reflection
 Building this project demonstrated the immense power of integrating LLMs into traditional web applications. Key takeaways include:
