@@ -127,7 +127,7 @@ textarea {
   padding: 1rem;
   color: #e2e8f0;
   font-family: 'Courier New', Courier, monospace;
-  font-size: 0.95rem;
+  font-size: 16px;
   resize: vertical;
   outline: none;
   transition: border-color 0.3s ease;
@@ -268,3 +268,37 @@ select:focus {
     transform: translateY(0);
   }
 }
+
+@media (max-width: 600px) {
+  #root {
+    padding: 1rem;
+    min-height: auto;
+  }
+  .app-title {
+    font-size: 1.8rem;
+  }
+  .app-subtitle {
+    font-size: 16px;
+  }
+  .split-pane {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .panel {
+    padding: 1rem;
+    min-height: 300px;
+    flex: none;
+  }
+  textarea {
+    font-size: 16px;
+    min-height: 200px;
+    flex: none;
+  }
+  select {
+    font-size: 16px;
+  }
+  .btn-primary {
+    padding: 0.75rem;
+  }
+}
+
