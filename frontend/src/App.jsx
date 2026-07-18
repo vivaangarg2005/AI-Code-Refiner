@@ -9,7 +9,43 @@ function App() {
   const [task, setTask] = useState('explain');
   const [output, setOutput] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
+  const [leftWidth, setLeftWidth] = useState(50); // Default 50%
   const outputRef = useRef(null);
+  const isDragging = useRef(false);
+
+  // Drag-to-resize logic
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      if (!isDragging.current) return;
+      // Calculate percentage based on window width
+      const newWidth = (e.clientX / window.innerWidth) * 100;
+      // Constrain between 20% and 80%
+      if (newWidth >= 20 && newWidth <= 80) {
+        setLeftWidth(newWidth);
+      }
+    };
+
+    const handleMouseUp = () => {
+      if (isDragging.current) {
+        isDragging.current = false;
+        document.body.style.cursor = 'default';
+      }
+    };
+
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, []);
+
+  const startDrag = (e) => {
+    e.preventDefault();
+    isDragging.current = true;
+    document.body.style.cursor = 'col-resize';
+  };
 
   // Auto-scroll to bottom as output streams
   useEffect(() => {
@@ -90,7 +126,7 @@ function App() {
         <p className="app-subtitle">Understand, refactor, and debug your code instantly</p>
       </header>
       
-      <main className="split-pane">
+      <main className="split-pane" style={{ '--left-width': `${leftWidth}%` }}>
         {/* Input Panel */}
         <section className="panel input-panel">
           <div className="panel-header">
@@ -131,6 +167,15 @@ function App() {
             )}
           </button>
         </section>
+
+        {/* Resizable Divider */}
+        <div 
+          className="resizer" 
+          onMouseDown={startDrag}
+          title="Drag to resize"
+        >
+          <span className="resizer-icon">↔</span>
+        </div>
 
         {/* Output Panel */}
         <section className="panel output-panel">
